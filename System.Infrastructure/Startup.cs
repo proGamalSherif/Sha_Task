@@ -13,7 +13,7 @@ namespace System.Infrastructure
         {
             services.AddDbContext<SystemDBContext>(opt =>
             {
-                opt.UseSqlServer(configuration.GetConnectionString("LocalConnection"));
+                opt.UseSqlServer(configuration.GetConnectionString("OnlineConnection"));
             });
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             return services;
