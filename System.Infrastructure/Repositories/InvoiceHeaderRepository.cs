@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace System.Infrastructure.Repositories
 {
-    public class InvoiceHeaderRepository(SystemDBContext db) : IGenericRepository<InvoiceHeader>
+    public class InvoiceHeaderRepository(SystemDBContext db) : IInvoiceRepository
     {
         public async Task<ResponseWrapper<InvoiceHeader>> AddAsync(InvoiceHeader entity)
         {
@@ -54,6 +54,26 @@ namespace System.Infrastructure.Repositories
                 return ResponseWrapper<ICollection<InvoiceHeader>>.Failure($"An Internal Error Occurred ({ex.Message})");
             }
         }
+        public async Task<ResponseWrapper<ICollection<InvoiceHeader>>> GetAllPaginatedAsync(int pgSize, int pgNumber)
+        {
+            try
+            {
+                var invoices = await db.InvoiceHeader
+                    .Include(d => d.InvoiceDetails)
+                    .Include(b => b.Branch)
+                    .Include(c => c.Cashier)
+                    .Skip((pgNumber - 1) * pgSize)
+                    .Take(pgSize)
+                    .ToListAsync();
+                if (!invoices.Any())
+                    return ResponseWrapper<ICollection<InvoiceHeader>>.Failure("No Invoices Found");
+                return ResponseWrapper<ICollection<InvoiceHeader>>.Success(message: "Invoices Found Successfully", invoices);
+            }
+            catch (Exception ex)
+            {
+                return ResponseWrapper<ICollection<InvoiceHeader>>.Failure($"An Internal Error Occurred ({ex.Message})");
+            }
+        }
         public async Task<ResponseWrapper<InvoiceHeader>> GetByIdAsync(long id)
         {
             try
@@ -70,6 +90,20 @@ namespace System.Infrastructure.Repositories
             }catch(Exception ex)
             {
                 return ResponseWrapper<InvoiceHeader>.Failure($"An Internal Error Occurred ({ex.Message})");
+            }
+        }
+        public async Task<ResponseWrapper<int>> GetTotalPages(int pgSize)
+        {
+            try
+            {
+                var totalRows = await db.InvoiceHeader
+               .CountAsync();
+                var totalPages = (int)Math.Ceiling((double)totalRows / pgSize);
+                return ResponseWrapper<int>.Success(data: totalPages);
+            }
+            catch (Exception ex)
+            {
+                return ResponseWrapper<int>.Failure($"An Internal Error occurred ({ex.Message})");
             }
         }
         public Task<ResponseWrapper<InvoiceHeader>> UpdateAsync(InvoiceHeader entity)

@@ -61,13 +61,13 @@ namespace System.Infrastructure.Repositories
             try
             {
                 var cashiers = await db.Cashier
-               .Include(b => b.Branch)
-               .ThenInclude(c => c.City)
-               .Include(i => i.InvoiceHeader)
-               .ThenInclude(id => id.InvoiceDetails)
-               .Skip((pgNumber - 1) * pgSize)
-                .Take(pgSize)
-               .ToListAsync();
+                   .Include(b => b.Branch)
+                   .ThenInclude(c => c.City)
+                   .Include(i => i.InvoiceHeader)
+                   .ThenInclude(id => id.InvoiceDetails)
+                   .Skip((pgNumber - 1) * pgSize)
+                   .Take(pgSize)
+                   .ToListAsync();
                 if (!cashiers.Any())
                     return ResponseWrapper<ICollection<Cashier>>.Failure("No Entities Found");
                 return ResponseWrapper<ICollection<Cashier>>.Success(message: "Entities Found Successfully", data: cashiers);

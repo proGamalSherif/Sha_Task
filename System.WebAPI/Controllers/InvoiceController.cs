@@ -53,5 +53,21 @@ namespace System.WebAPI.Controllers
                 return BadRequest(responseResult.Message);
             return Ok(responseResult);
         }
+        [HttpGet("GetTotalPages/{pgSize}")]
+        public async Task<IActionResult> GetTotalPages(int pgSize)
+        {
+            var responseResult = await invoiceService.GetTotalPages(pgSize);
+            if (!responseResult.IsSuccess)
+                return NotFound(responseResult.Message);
+            return Ok(responseResult);
+        }
+        [HttpGet("GetAllPaginatedAsync/{pgSize}/{pgNumber}")]
+        public async Task<IActionResult> GetAllPaginatedAsync(int pgSize,int pgNumber)
+        {
+            var responseResult = await invoiceService.GetAllPaginatedAsync(pgSize, pgNumber);
+            if (!responseResult.IsSuccess)
+                return NotFound(responseResult.Message);
+            return Ok(responseResult);
+        }
     }
 }

@@ -52,6 +52,14 @@ namespace System.Application.Services
             var mappedOutput = mapper.Map<ICollection<ReadInvoiceDTO>>(responseResult.Data);
             return ResponseWrapper<ICollection<ReadInvoiceDTO>>.Success(message: responseResult.Message, data: mappedOutput);
         }
+        public async Task<ResponseWrapper<ICollection<ReadInvoiceDTO>>> GetAllPaginatedAsync(int pgSize, int pgNumber)
+        {
+            var responseResult = await unitOfWork.InvoiceHeaderRepository.GetAllPaginatedAsync(pgSize, pgNumber);
+            if (!responseResult.IsSuccess)
+                return ResponseWrapper<ICollection<ReadInvoiceDTO>>.Failure(responseResult.Message);
+            var mappedOutput = mapper.Map<ICollection<ReadInvoiceDTO>>(responseResult.Data);
+            return ResponseWrapper<ICollection<ReadInvoiceDTO>>.Success(message: responseResult.Message, data: mappedOutput);
+        }
         public async Task<ResponseWrapper<ReadInvoiceDTO>> GetInvoiceByIdAsync(long id)
         {
             var responseResult = await unitOfWork.InvoiceHeaderRepository.GetByIdAsync(id);
@@ -59,6 +67,11 @@ namespace System.Application.Services
                 return ResponseWrapper<ReadInvoiceDTO>.Failure(responseResult.Message);
             var mappedOutput = mapper.Map<ReadInvoiceDTO>(responseResult.Data);
             return ResponseWrapper<ReadInvoiceDTO>.Success(message: responseResult.Message,data: mappedOutput);
+        }
+        public async Task<ResponseWrapper<int>> GetTotalPages(int pgSize)
+        {
+            var responseResult = await unitOfWork.InvoiceHeaderRepository.GetTotalPages(pgSize);
+            return responseResult;
         }
         public async Task<ResponseWrapper<ReadInvoiceDTO>> UpdateInvoiceAsync(UpdateInvoiceDTO invoiceDto)
         {

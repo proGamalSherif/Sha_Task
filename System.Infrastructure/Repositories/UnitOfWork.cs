@@ -16,7 +16,7 @@ namespace System.Infrastructure.Repositories
             CitiesRepository = new CityRepository(_db);
             BranchRepository = new BranchRepository(_db);
         }
-        public IGenericRepository<InvoiceHeader> InvoiceHeaderRepository { get; }
+        public IInvoiceRepository InvoiceHeaderRepository { get; }
         public IGenericRepository<InvoiceDetails> InvoiceDetailsRepository { get; }
         public ICashierRepository CashierRepository { get; }
         public IQueryRepository<Cities> CitiesRepository { get; }
