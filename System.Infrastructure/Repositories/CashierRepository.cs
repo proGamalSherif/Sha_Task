@@ -96,6 +96,45 @@ namespace System.Infrastructure.Repositories
                 return ResponseWrapper<Cashier>.Failure($"An Internal Error occurred ({ex.Message})");
             }
         }
+        public async Task<ResponseWrapper<ICollection<Cashier>>> GetFilteredPaginatedAsync(int pgSize, int pgNumber, string filterText)
+        {
+            try
+            {
+                var cashiers = await db.Cashier
+                    .Where(c => EF.Functions.Like(c.CashierName, $"%{filterText ?? ""}%"))
+                    .Include(b => b.Branch)
+                        .ThenInclude(c => c.City)
+                    .Include(i => i.InvoiceHeader)
+                        .ThenInclude(id => id.InvoiceDetails)
+                    .Skip((pgNumber - 1) * pgSize)
+                    .Take(pgSize)
+                    .ToListAsync();
+
+                if (!cashiers.Any())
+                    return ResponseWrapper<ICollection<Cashier>>.Failure("No Entities Found");
+
+                return ResponseWrapper<ICollection<Cashier>>.Success("Entities Found Successfully", cashiers);
+            }
+            catch (Exception ex)
+            {
+                return ResponseWrapper<ICollection<Cashier>>.Failure($"An Internal Error occurred ({ex.Message})");
+            }
+        }
+        public async Task<ResponseWrapper<int>> GetTotalFilteredPages(int pgSize, string filterText)
+        {
+            try
+            {
+                var totalRows = await db.Cashier
+                    .Where(c => EF.Functions.Like(c.CashierName, $"%{filterText ?? ""}%"))
+                    .CountAsync();
+                var totalPages = (int)Math.Ceiling((double)totalRows / pgSize);
+                return ResponseWrapper<int>.Success(data: totalPages);
+            }
+            catch (Exception ex)
+            {
+                return ResponseWrapper<int>.Failure($"An Internal Error occurred ({ex.Message})");
+            }
+        }
         public async Task<ResponseWrapper<int>> GetTotalPages(int pgSize)
         {
             try

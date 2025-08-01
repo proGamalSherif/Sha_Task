@@ -44,6 +44,14 @@ namespace System.Application.Services
             await unitOfWork.SaveChangesAsync();
             return ResponseWrapper<bool>.Success(message: responseResult.Message,data:true);
         }
+        public async Task<ResponseWrapper<ICollection<ReadInvoiceDTO>>> GetAllFilteredPaginatedAsync(int pgSize, int pgNumber, string filterText)
+        {
+            var responseResult = await unitOfWork.InvoiceHeaderRepository.GetAllFilteredPaginatedAsync(pgSize, pgNumber,filterText);
+            if (!responseResult.IsSuccess)
+                return ResponseWrapper<ICollection<ReadInvoiceDTO>>.Failure(responseResult.Message);
+            var mappedOutput = mapper.Map<ICollection<ReadInvoiceDTO>>(responseResult.Data);
+            return ResponseWrapper<ICollection<ReadInvoiceDTO>>.Success(message: responseResult.Message, data: mappedOutput);
+        }
         public async Task<ResponseWrapper<ICollection<ReadInvoiceDTO>>> GetAllInvoicesAsync()
         {
             var responseResult = await unitOfWork.InvoiceHeaderRepository.GetAllAsync();
@@ -67,6 +75,11 @@ namespace System.Application.Services
                 return ResponseWrapper<ReadInvoiceDTO>.Failure(responseResult.Message);
             var mappedOutput = mapper.Map<ReadInvoiceDTO>(responseResult.Data);
             return ResponseWrapper<ReadInvoiceDTO>.Success(message: responseResult.Message,data: mappedOutput);
+        }
+        public async Task<ResponseWrapper<int>> GetTotalFilteredPages(int pgSize, string filterText)
+        {
+            var responseResult = await unitOfWork.InvoiceHeaderRepository.GetTotalFilteredPages(pgSize,filterText);
+            return responseResult;
         }
         public async Task<ResponseWrapper<int>> GetTotalPages(int pgSize)
         {

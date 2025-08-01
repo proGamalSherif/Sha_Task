@@ -7,5 +7,7 @@ namespace System.Application.Interface.Repositories
     {
         Task<ResponseWrapper<int>> GetTotalPages(int pgSize);
         Task<ResponseWrapper<ICollection<InvoiceHeader>>> GetAllPaginatedAsync(int pgSize, int pgNumber);
+        Task<ResponseWrapper<ICollection<InvoiceHeader>>> GetAllFilteredPaginatedAsync(int pgSize, int pgNumber, string filterText);
+        Task<ResponseWrapper<int>> GetTotalFilteredPages(int pgSize, string filterText);
     }
 }

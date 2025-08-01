@@ -45,6 +45,22 @@ namespace System.WebAPI.Controllers
                 return NotFound(responseResult.Message);
             return Ok(responseResult);
         }
+        [HttpGet("GetFilteredPaginatedAsync/{pgSize}/{pgNumber}/{filterText}")]
+        public async Task<IActionResult> GetFilteredPaginatedAsync(int pgSize, int pgNumber,string filterText)
+        {
+            var responseResult = await cashierService.GetFilteredPaginatedAsync(pgSize, pgNumber, filterText);
+            if (!responseResult.IsSuccess)
+                return NotFound(responseResult.Message);
+            return Ok(responseResult);
+        }
+        [HttpGet("GetTotalFilteredPages/{pgSize}/{filterText}")]
+        public async Task<IActionResult> GetTotalFilteredPages(int pgSize,string filterText)
+        {
+            var responseResult = await cashierService.GetTotalFilteredPages(pgSize,filterText);
+            if (!responseResult.IsSuccess)
+                return NotFound(responseResult.Message);
+            return Ok(responseResult);
+        }
         [HttpPost]
         public async Task<IActionResult> InsertAsync(InsertCashierDTO entity)
         {

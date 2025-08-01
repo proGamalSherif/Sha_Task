@@ -54,6 +54,27 @@ namespace System.Infrastructure.Repositories
                 return ResponseWrapper<ICollection<InvoiceHeader>>.Failure($"An Internal Error Occurred ({ex.Message})");
             }
         }
+        public async Task<ResponseWrapper<ICollection<InvoiceHeader>>> GetAllFilteredPaginatedAsync(int pgSize, int pgNumber, string filterText)
+        {
+            try
+            {
+                var invoices = await db.InvoiceHeader
+                    .Where(c => EF.Functions.Like(c.CustomerName, $"%{filterText ?? ""}%"))
+                    .Include(d => d.InvoiceDetails)
+                    .Include(b => b.Branch)
+                    .Include(c => c.Cashier)
+                    .Skip((pgNumber - 1) * pgSize)
+                    .Take(pgSize)
+                    .ToListAsync();
+                if (!invoices.Any())
+                    return ResponseWrapper<ICollection<InvoiceHeader>>.Failure("No Invoices Found");
+                return ResponseWrapper<ICollection<InvoiceHeader>>.Success(message: "Invoices Found Successfully", invoices);
+            }
+            catch (Exception ex)
+            {
+                return ResponseWrapper<ICollection<InvoiceHeader>>.Failure($"An Internal Error Occurred ({ex.Message})");
+            }
+        }
         public async Task<ResponseWrapper<ICollection<InvoiceHeader>>> GetAllPaginatedAsync(int pgSize, int pgNumber)
         {
             try
@@ -90,6 +111,21 @@ namespace System.Infrastructure.Repositories
             }catch(Exception ex)
             {
                 return ResponseWrapper<InvoiceHeader>.Failure($"An Internal Error Occurred ({ex.Message})");
+            }
+        }
+        public async Task<ResponseWrapper<int>> GetTotalFilteredPages(int pgSize, string filterText)
+        {
+            try
+            {
+                var totalRows = await db.InvoiceHeader
+                    .Where(c => EF.Functions.Like(c.CustomerName, $"%{filterText ?? ""}%"))
+                    .CountAsync();
+                var totalPages = (int)Math.Ceiling((double)totalRows / pgSize);
+                return ResponseWrapper<int>.Success(data: totalPages);
+            }
+            catch (Exception ex)
+            {
+                return ResponseWrapper<int>.Failure($"An Internal Error occurred ({ex.Message})");
             }
         }
         public async Task<ResponseWrapper<int>> GetTotalPages(int pgSize)

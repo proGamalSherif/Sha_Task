@@ -12,5 +12,7 @@ namespace System.Application.Interface.Services
         Task<ResponseWrapper<ReadCashierDTO>> DeleteAsync(int id);
         Task<ResponseWrapper<int>> GetTotalPages(int pgSize);
         Task<ResponseWrapper<ICollection<ReadCashierDTO>>> GetAllPaginatedAsync(int pgSize, int pgNumber);
+        Task<ResponseWrapper<ICollection<ReadCashierDTO>>> GetFilteredPaginatedAsync(int pgSize, int pgNumber, string filterText);
+        Task<ResponseWrapper<int>> GetTotalFilteredPages(int pgSize, string filterText);
     }
 }

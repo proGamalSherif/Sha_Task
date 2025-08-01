@@ -69,5 +69,21 @@ namespace System.WebAPI.Controllers
                 return NotFound(responseResult.Message);
             return Ok(responseResult);
         }
+        [HttpGet("GetTotalFilteredPages/{pgSize}/{filterText}")]
+        public async Task<IActionResult> GetTotalFilteredPages(int pgSize,string filterText)
+        {
+            var responseResult = await invoiceService.GetTotalFilteredPages(pgSize, filterText);
+            if (!responseResult.IsSuccess)
+                return NotFound(responseResult.Message);
+            return Ok(responseResult);
+        }
+        [HttpGet("GetAllFilteredPaginatedAsync/{pgSize}/{pgNumber}/{filterText}")]
+        public async Task<IActionResult> GetAllFilteredPaginatedAsync(int pgSize, int pgNumber, string filterText)
+        {
+            var responseResult = await invoiceService.GetAllFilteredPaginatedAsync(pgSize, pgNumber,filterText);
+            if (!responseResult.IsSuccess)
+                return NotFound(responseResult.Message);
+            return Ok(responseResult);
+        }
     }
 }
