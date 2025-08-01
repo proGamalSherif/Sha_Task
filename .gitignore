@@ -1,0 +1,74 @@
+# Ignore Visual Studio files
+.vs/
+*.user
+*.suo
+
+# Ignore build results
+bin/
+obj/
+**/bin/
+**/obj/
+
+# Ignore publish output
+**/publish/
+**/Release/
+**/Debug/
+
+# Ignore NuGet packages
+*.nupkg
+*.snupkg
+packages/
+*.nuspec
+.project.lock.json
+project.lock.json
+project.fragment.lock.json
+
+# Ignore Rider IDE files
+.idea/
+
+# Ignore temporary files
+*.tmp
+*.temp
+*.bak
+*.log
+*.swp
+
+# Ignore user-specific files
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignore ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Ignore config transformation output
+*.Transform.cs
+
+# Ignore test results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+*.testsettings
+*.vsmdi
+
+# Ignore local settings
+appsettings.Development.json
+secrets.json
+
+# Ignore generated files
+Generated_Code/
+
+# Ignore JetBrains Rider
+.idea/
+
+# Ignore Resharper
+_ReSharper*/
+*.DotSettings.user
+
+# Ignore any node_modules if accidentally added (if Angular or frontend is in same repo)
+node_modules/
+
+# Ignore environment files (optional if you use them locally only)
+.env
+.env.*

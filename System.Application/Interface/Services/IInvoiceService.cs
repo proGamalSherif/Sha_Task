@@ -1,0 +1,14 @@
+﻿using System.Application.DTOs.InvoiceDTOs;
+using Jumify.Application.APIWrapper;
+
+namespace System.Application.Interface.Services
+{
+    public interface IInvoiceService
+    {
+        Task<ResponseWrapper<ICollection<ReadInvoiceDTO>>> GetAllInvoicesAsync();
+        Task<ResponseWrapper<ReadInvoiceDTO>> GetInvoiceByIdAsync(long id);
+        Task<ResponseWrapper<ReadInvoiceDTO>> AddInvoiceAsync(InsertInvoiceDTO invoiceDto);
+        Task<ResponseWrapper<ReadInvoiceDTO>> UpdateInvoiceAsync(UpdateInvoiceDTO invoiceDto);
+        Task<ResponseWrapper<bool>> DeleteInvoiceAsync(long id);
+    }
+}
