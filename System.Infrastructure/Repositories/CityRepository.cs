@@ -13,6 +13,7 @@ namespace System.Infrastructure.Repositories
             try
             {
                 var branches = await db.Cities
+                    .Include(b=>b.Branches)
                     .ToListAsync();
                 if (!branches.Any())
                     return ResponseWrapper<ICollection<Cities>>.Failure("No Branches Found");
@@ -28,6 +29,7 @@ namespace System.Infrastructure.Repositories
             try
             {
                 var branch = await db.Cities
+                    .Include(b=>b.Branches)
                     .FirstOrDefaultAsync(b => b.ID == Id);
                 if (branch == null)
                     return ResponseWrapper<Cities>.Failure("No Branch Found For Selected Id");

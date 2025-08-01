@@ -9,7 +9,6 @@ namespace System.Application.MappingProfiles
         public BranchProfile()
         {
             CreateMap<Branches, ReadBranchDTO>()
-                .ForMember(dest=>dest.CityName,opt=>opt.MapFrom(src=>src.City.CityName))
                 .ReverseMap();
         }
     }

@@ -18,7 +18,7 @@ namespace System.Infrastructure.Repositories
         }
         public IGenericRepository<InvoiceHeader> InvoiceHeaderRepository { get; }
         public IGenericRepository<InvoiceDetails> InvoiceDetailsRepository { get; }
-        public IGenericRepository<Cashier> CashierRepository { get; }
+        public ICashierRepository CashierRepository { get; }
         public IQueryRepository<Cities> CitiesRepository { get; }
         public IBranchRepository BranchRepository { get; }
 

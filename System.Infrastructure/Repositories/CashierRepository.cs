@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace System.Infrastructure.Repositories
 {
-    public class CashierRepository(SystemDBContext db) : IGenericRepository<Cashier>
+    public class CashierRepository(SystemDBContext db) : ICashierRepository
     {
         public async Task<ResponseWrapper<Cashier>> AddAsync(Cashier entity)
         {
@@ -43,9 +43,31 @@ namespace System.Infrastructure.Repositories
             {
                 var cashiers = await db.Cashier
                     .Include(b => b.Branch)
+                    .ThenInclude(c=>c.City)
                     .Include(i=>i.InvoiceHeader)
                     .ThenInclude(id=>id.InvoiceDetails)
                     .ToListAsync();
+                if (!cashiers.Any())
+                    return ResponseWrapper<ICollection<Cashier>>.Failure("No Entities Found");
+                return ResponseWrapper<ICollection<Cashier>>.Success(message: "Entities Found Successfully", data: cashiers);
+            }
+            catch (Exception ex)
+            {
+                return ResponseWrapper<ICollection<Cashier>>.Failure($"An Internal Error occurred ({ex.Message})");
+            }
+        }
+        public async Task<ResponseWrapper<ICollection<Cashier>>> GetAllPaginatedAsync(int pgSize, int pgNumber)
+        {
+            try
+            {
+                var cashiers = await db.Cashier
+               .Include(b => b.Branch)
+               .ThenInclude(c => c.City)
+               .Include(i => i.InvoiceHeader)
+               .ThenInclude(id => id.InvoiceDetails)
+               .Skip((pgNumber - 1) * pgSize)
+                .Take(pgSize)
+               .ToListAsync();
                 if (!cashiers.Any())
                     return ResponseWrapper<ICollection<Cashier>>.Failure("No Entities Found");
                 return ResponseWrapper<ICollection<Cashier>>.Success(message: "Entities Found Successfully", data: cashiers);
@@ -61,6 +83,7 @@ namespace System.Infrastructure.Repositories
             {
                 var cashier = await db.Cashier
                     .Include(b => b.Branch)
+                    .ThenInclude(c=>c.City)
                     .Include(i => i.InvoiceHeader)
                     .ThenInclude(id => id.InvoiceDetails)
                      .FirstOrDefaultAsync(c => c.ID == id);
@@ -71,6 +94,19 @@ namespace System.Infrastructure.Repositories
             catch (Exception ex)
             {
                 return ResponseWrapper<Cashier>.Failure($"An Internal Error occurred ({ex.Message})");
+            }
+        }
+        public async Task<ResponseWrapper<int>> GetTotalPages(int pgSize)
+        {
+            try
+            {
+                var totalRows = await db.Cashier
+               .CountAsync();
+                var totalPages = (int)Math.Ceiling((double)totalRows / pgSize);
+                return ResponseWrapper<int>.Success(data: totalPages);
+            }catch (Exception ex)
+            {
+                return ResponseWrapper<int>.Failure($"An Internal Error occurred ({ex.Message})");
             }
         }
         public async Task<ResponseWrapper<Cashier>> UpdateAsync(Cashier entity)

@@ -6,7 +6,7 @@ namespace System.Application.Interface.Repositories
     {
         IGenericRepository<InvoiceHeader> InvoiceHeaderRepository { get; }
         IGenericRepository<InvoiceDetails> InvoiceDetailsRepository { get; }
-        IGenericRepository<Cashier> CashierRepository { get; }
+        ICashierRepository CashierRepository { get; }
         IQueryRepository<Cities> CitiesRepository { get; }
         IBranchRepository BranchRepository { get; }
         Task SaveChangesAsync();

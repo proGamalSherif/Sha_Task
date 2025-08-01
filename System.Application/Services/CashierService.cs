@@ -39,6 +39,14 @@ namespace System.Application.Services
             var mappedOutput = mapper.Map<ICollection<ReadCashierDTO>>(responseResult.Data);
             return ResponseWrapper<ICollection<ReadCashierDTO>>.Success(message: responseResult.Message, mappedOutput);
         }
+        public async Task<ResponseWrapper<ICollection<ReadCashierDTO>>> GetAllPaginatedAsync(int pgSize, int pgNumber)
+        {
+            var responseResult = await unitOfWork.CashierRepository.GetAllPaginatedAsync(pgSize, pgNumber);
+            if (!responseResult.IsSuccess)
+                return ResponseWrapper<ICollection<ReadCashierDTO>>.Failure(responseResult.Message);
+            var mappedOutput = mapper.Map<ICollection<ReadCashierDTO>>(responseResult.Data);
+            return ResponseWrapper<ICollection<ReadCashierDTO>>.Success(message: responseResult.Message, data: mappedOutput);
+        }
         public async Task<ResponseWrapper<ReadCashierDTO>> GetByIdAsync(int id)
         {
             var responseResult = await unitOfWork.CashierRepository.GetByIdAsync(id);
@@ -47,6 +55,13 @@ namespace System.Application.Services
             await unitOfWork.SaveChangesAsync();
             var mappedOutput = mapper.Map<ReadCashierDTO>(responseResult.Data);
             return ResponseWrapper<ReadCashierDTO>.Success(message: responseResult.Message, mappedOutput);
+        }
+        public async Task<ResponseWrapper<int>> GetTotalPages(int pgSize)
+        {
+            var responseResult = await unitOfWork.CashierRepository.GetTotalPages(pgSize);
+            if (!responseResult.IsSuccess)
+                return ResponseWrapper<int>.Failure(responseResult.Message);
+            return responseResult;
         }
         public async Task<ResponseWrapper<ReadCashierDTO>> InsertAsync(InsertCashierDTO entity)
         {

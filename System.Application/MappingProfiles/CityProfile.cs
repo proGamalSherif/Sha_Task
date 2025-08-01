@@ -1,4 +1,4 @@
-﻿using System.Application.DTOs.BranchesDTOs;
+﻿using System.Application.DTOs.CitiesDTOs;
 using System.Domain.Entities;
 using AutoMapper;
 
