@@ -57,7 +57,7 @@ namespace System.WebAPI.Controllers
                 return BadRequest(responseResult.Message);
             return Ok(responseResult);
         }
-        [HttpGet("GetTotalPages/{pgSize}")]
+        [HttpGet("TPages/{pgSize}")]
         public async Task<IActionResult> GetTotalPages(int pgSize)
         {
             var responseResult = await invoiceService.GetTotalPages(pgSize);
@@ -65,7 +65,7 @@ namespace System.WebAPI.Controllers
                 return NotFound(responseResult.Message);
             return Ok(responseResult);
         }
-        [HttpGet("GetAllPaginatedAsync/{pgSize}/{pgNumber}")]
+        [HttpGet("Pagination/{pgSize}/{pgNumber}")]
         public async Task<IActionResult> GetAllPaginatedAsync(int pgSize,int pgNumber)
         {
             var responseResult = await invoiceService.GetAllPaginatedAsync(pgSize, pgNumber);
@@ -73,7 +73,7 @@ namespace System.WebAPI.Controllers
                 return NotFound(responseResult.Message);
             return Ok(responseResult);
         }
-        [HttpGet("GetTotalFilteredPages/{pgSize}/{filterText}")]
+        [HttpGet("TPagPages/{pgSize}/{filterText}")]
         public async Task<IActionResult> GetTotalFilteredPages(int pgSize,string filterText)
         {
             var responseResult = await invoiceService.GetTotalFilteredPages(pgSize, filterText);
@@ -81,7 +81,7 @@ namespace System.WebAPI.Controllers
                 return NotFound(responseResult.Message);
             return Ok(responseResult);
         }
-        [HttpGet("GetAllFilteredPaginatedAsync/{pgSize}/{pgNumber}/{filterText}")]
+        [HttpGet("PagFilter/{pgSize}/{pgNumber}/{filterText}")]
         public async Task<IActionResult> GetAllFilteredPaginatedAsync(int pgSize, int pgNumber, string filterText)
         {
             var responseResult = await invoiceService.GetAllFilteredPaginatedAsync(pgSize, pgNumber,filterText);
