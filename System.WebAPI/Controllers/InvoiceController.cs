@@ -32,6 +32,8 @@ namespace System.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> InsertAsync(InsertInvoiceDTO entity)
         {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
             var responseResult = await invoiceService.AddInvoiceAsync(entity);
             if(!responseResult.IsSuccess)
                 return BadRequest(responseResult.Message);

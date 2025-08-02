@@ -37,7 +37,6 @@ namespace System.Application.Services
             {
                 await unitOfWork.InvoiceDetailsRepository.DeleteAsync(item.ID);
             }
-            await unitOfWork.SaveChangesAsync();
             var responseResult = await unitOfWork.InvoiceHeaderRepository.DeleteAsync(id);
             if (!responseResult.IsSuccess)
                 return ResponseWrapper<bool>.Failure(responseResult.Message);
