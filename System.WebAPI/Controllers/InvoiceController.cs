@@ -42,6 +42,8 @@ namespace System.WebAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateAsync(UpdateInvoiceDTO entity)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
             var responseResult = await invoiceService.UpdateInvoiceAsync(entity);
             if (!responseResult.IsSuccess)
                 return BadRequest(responseResult.Message);

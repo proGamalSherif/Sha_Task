@@ -7,7 +7,6 @@ namespace System.WebAPI.Controllers
     [ApiController]
     public class BranchController : ControllerBase
     {
-        //
         private readonly IBranchService branchService;
         public BranchController(IBranchService _branchService)
         {
