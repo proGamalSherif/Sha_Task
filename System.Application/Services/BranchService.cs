@@ -25,6 +25,8 @@ namespace System.Application.Services
         }
         public async Task<ResponseWrapper<ICollection<ReadBranchDTO>>> GetAllByCityId(int id)
         {
+            if (id <= 0)
+                return ResponseWrapper<ICollection<ReadBranchDTO>>.Failure("City Id Should be more than zero");
             var responseResult = await unitOfWork.BranchRepository.GetAllByCityId(id);
             if (!responseResult.IsSuccess)
                 return ResponseWrapper<ICollection<ReadBranchDTO>>.Failure(responseResult.Message);
@@ -33,6 +35,8 @@ namespace System.Application.Services
         }
         public async Task<ResponseWrapper<ReadBranchDTO>> GetByIdAsync(int id)
         {
+            if (id <= 0)
+                return ResponseWrapper<ReadBranchDTO>.Failure("Primary Id shoudld be more than zero");
             var responseResult = await unitOfWork.BranchRepository.GetByIdAsync(id);
             if (!responseResult.IsSuccess)
                 return ResponseWrapper<ReadBranchDTO>.Failure(responseResult.Message);
