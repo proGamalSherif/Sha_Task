@@ -28,7 +28,7 @@ namespace System.WebAPI.Controllers
                 return NotFound(responseResult.Message);
             return Ok(responseResult);
         }
-        [HttpGet("GetAllByCityId/{Id}")]
+        [HttpGet("ByCity/{Id}")]
         public async Task<IActionResult> GetAllByCityId(int Id)
         {
             var responseResult = await branchService.GetAllByCityId(Id);
